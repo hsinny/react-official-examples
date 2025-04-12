@@ -1,3 +1,13 @@
+.game {
+  display: flex;
+  align-items: start;
+}
+
+.history-list {
+  text-align: left;
+  list-style: none;
+}
+
 .board-row {
   display: flex;
 }
