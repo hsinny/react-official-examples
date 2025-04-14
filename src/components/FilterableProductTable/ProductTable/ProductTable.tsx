@@ -18,7 +18,15 @@ const ProductList = ({ products }: { products: Products }) => (
   ))
 )
 
-export default function ProductTable({ products }: { products: Products }) {
+export default function ProductTable({ 
+  products, 
+  filterTxt, 
+  isStockOnly,
+}: { 
+  products: Products;
+  filterTxt: string;
+  isStockOnly: boolean;
+}) {
   return (
     <table>
       <thead className="product-table-head">

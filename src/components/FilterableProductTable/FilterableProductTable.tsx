@@ -1,3 +1,4 @@
+import { useState } from "react";
 import SearchBar from "./SearchBar/SearchBar";
 import ProductTable from "./ProductTable/ProductTable";
 
@@ -20,11 +21,22 @@ const PRODUCTS: Products = [
 ];
 
 export default function FilterableProductTable() {
+  const [filterTxt, setFilterTxt] = useState<string>('');
+  const [isStockOnly, setIsStockOnly] = useState<boolean>(false);
+
   return (
     <>
-      <SearchBar />
-      <ProductTable products={PRODUCTS} />
+      <SearchBar
+        filterTxt={filterTxt}
+        isStockOnly={isStockOnly}
+        onFilterChange={setFilterTxt}
+        onIsStockOnlyChange={setIsStockOnly}
+      />
+      <ProductTable
+        products={PRODUCTS}
+        filterTxt={filterTxt}
+        isStockOnly={isStockOnly}
+      />
     </>
   )
-
 }
