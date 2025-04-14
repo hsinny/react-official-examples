@@ -1,6 +1,6 @@
-import Square from "./Square";
-import { squaresType, squareType } from "./Game";
-import '../styles/components/Board.css';
+import Square from "../Square/Square";
+import { squaresType, squareType } from "../Game";
+import './Board.css';
 
 export default function Board({
   xIsNext,

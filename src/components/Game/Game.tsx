@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Board from "./Board";
-import History from "./History";
-import '../styles/components/Game.css';
+import Board from "./Board/Board";
+import History from "./History/History";
+import './Game.css';
 
 export type squareType = 'O' | 'X' | null;
 export type squaresType = Array<squareType>;

@@ -1,5 +1,5 @@
-import { historyType } from "./Game";
-import '../styles/components/History.css';
+import { historyType } from "../Game";
+import './History.css';
 
 export default function History({
   history,
