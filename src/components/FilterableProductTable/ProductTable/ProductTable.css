@@ -1,0 +1,16 @@
+.product-row {
+  text-align: left;
+
+  td {
+    min-width: 80px;
+    padding: 2px 4px;
+  }
+}
+
+.product-row--soldout {
+  color: red;
+}
+
+.product-col-price {
+  text-align: center;
+}
