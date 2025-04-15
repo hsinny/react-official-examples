@@ -1,32 +1,56 @@
-import { Products } from '../FilterableProductTable';
+import { Product, Products } from '../FilterableProductTable';
 import './ProductTable.css';
 
-const ProductCategory = () => {
-  return (
-    <tr className='product-category-row'>
-      <th colSpan={2}>{'Fruits'}</th>
-    </tr>
-  )
+interface ProductsByCategory {
+  [key: string]: Array<Product>;
 }
 
-const ProductList = ({ products }: { products: Products }) => (
-  products.map((product, index) => (
-    <tr key={index} className={`product-row ${product.stocked ? '' : 'product-row--soldout'}`}>
-      <td>{product.name}</td>
-      <td className='product-col-price'>${product.price}</td>
-    </tr>
-  ))
-)
+const ProductsByCategory = ({ productsByCategory }: { productsByCategory: ProductsByCategory }) => {
+  let categoryRows = [];
 
-export default function ProductTable({ 
-  products, 
-  filterTxt, 
+  for (const category in productsByCategory) {
+    const CategoryTitle = () => (
+      <tr className='product-category-row'>
+        <th colSpan={2}>{category}</th>
+      </tr>
+    )
+
+    const CategoryProducts = () => productsByCategory[category].map((product, index) => (
+      <tr key={index} className={`product-row ${product.stocked ? '' : 'product-row--soldout'}`}>
+        <td>{product.name}</td>
+        <td className='product-col-price'>${product.price}</td>
+      </tr>
+    ));
+
+    categoryRows.push((
+      <>
+        <CategoryTitle />
+        <CategoryProducts />
+      </>
+    ));
+  }
+
+  return categoryRows;
+}
+
+export default function ProductTable({
+  products,
+  filterTxt,
   isStockOnly,
-}: { 
+}: {
   products: Products;
   filterTxt: string;
   isStockOnly: boolean;
 }) {
+
+  const productsByCategory = products.reduce<ProductsByCategory>((acc, product) => {
+    if (!acc[product.category]) {
+      acc[product.category] = [];
+    }
+    acc[product.category].push(product);
+    return acc;
+  }, {});
+
   return (
     <table>
       <thead className="product-table-head">
@@ -36,8 +60,7 @@ export default function ProductTable({
         </tr>
       </thead>
       <tbody>
-        <ProductCategory />
-        <ProductList products={products} />
+        <ProductsByCategory productsByCategory={productsByCategory} />
       </tbody>
     </table>
   )
