@@ -1,12 +1,13 @@
+import React from 'react';
 import { Product, Products } from '../FilterableProductTable';
 import './ProductTable.css';
 
-interface ProductsByCategory {
+interface ProductsByCategoryProps {
   [key: string]: Array<Product>;
 }
 
-const ProductsByCategory = ({ productsByCategory }: { productsByCategory: ProductsByCategory }) => {
-  let categoryRows = [];
+const ProductsByCategory = ({ productsByCategory }: { productsByCategory: ProductsByCategoryProps }) => {
+  const categoryRows = [];
 
   for (const category in productsByCategory) {
     const CategoryTitle = () => (
@@ -23,14 +24,14 @@ const ProductsByCategory = ({ productsByCategory }: { productsByCategory: Produc
     ));
 
     categoryRows.push((
-      <>
+      <React.Fragment key={category}>
         <CategoryTitle />
         <CategoryProducts />
-      </>
+      </React.Fragment>
     ));
   }
 
-  return categoryRows;
+  return <>{categoryRows}</>;
 }
 
 export default function ProductTable({
@@ -43,7 +44,7 @@ export default function ProductTable({
   isStockOnly: boolean;
 }) {
 
-  const productsByCategory = products.reduce<ProductsByCategory>((acc, product) => {
+  const productsByCategory = filteredProducts.reduce<ProductsByCategoryProps>((acc, product) => {
     if (!acc[product.category]) {
       acc[product.category] = [];
     }
