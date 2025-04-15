@@ -44,7 +44,20 @@ export default function ProductTable({
   isStockOnly: boolean;
 }) {
 
-  const productsByCategory = filteredProducts.reduce<ProductsByCategoryProps>((acc, product) => {
+  const visibleProducts = (() => {
+    let filteredProducts: Products = [...products];
+    if (filterTxt.trim() !== '') {
+      filteredProducts = filteredProducts.filter(product => product.name.toLowerCase().indexOf(filterTxt.toLowerCase().trim()) !== -1)
+    }
+
+    if (isStockOnly) {
+      filteredProducts = filteredProducts.filter(product => product.stocked)
+    }
+
+    return filteredProducts;
+  })();
+
+  const productsByCategory = visibleProducts.reduce<ProductsByCategoryProps>((acc, product) => {
     if (!acc[product.category]) {
       acc[product.category] = [];
     }
