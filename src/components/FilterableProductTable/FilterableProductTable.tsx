@@ -25,7 +25,7 @@ export default function FilterableProductTable() {
   const [isStockOnly, setIsStockOnly] = useState<boolean>(false);
 
   return (
-    <>
+    <section style={{ minHeight: '100vh' }}>
       <SearchBar
         filterTxt={filterTxt}
         isStockOnly={isStockOnly}
@@ -37,6 +37,6 @@ export default function FilterableProductTable() {
         filterTxt={filterTxt}
         isStockOnly={isStockOnly}
       />
-    </>
+    </section>
   )
 }
