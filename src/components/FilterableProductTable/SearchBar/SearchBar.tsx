@@ -1,10 +1,10 @@
 import './SearchBar.css';
 
-export default function SearchBar({ 
-  filterTxt, 
+export default function SearchBar({
+  filterTxt,
   isStockOnly,
-  onFilterChange, 
-  onIsStockOnlyChange, 
+  onFilterChange,
+  onIsStockOnlyChange,
 }: {
   filterTxt: string;
   isStockOnly: boolean;
@@ -13,23 +13,23 @@ export default function SearchBar({
 }) {
   return (
     <div className="searchbar">
-      <input 
-        type="text" 
-        name="keyword" 
-        placeholder="Search..." 
-        value={filterTxt} 
+      <input
+        type="text"
+        name="keyword"
+        placeholder="Search..."
+        value={filterTxt}
         onChange={(e) => onFilterChange(e.target.value)}
       />
       <div>
-        <input 
-          id="isInStock" 
-          type="checkbox" 
-          name="isInStock" 
+        <input
+          id="isInStock"
+          type="checkbox"
+          name="isInStock"
           checked={isStockOnly}
           onChange={(e) => onIsStockOnlyChange(e.target.checked)}
         />
         <label htmlFor="isInStock">Only show products in stock</label>
       </div>
     </div>
-  )
+  );
 }

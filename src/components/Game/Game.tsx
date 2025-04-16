@@ -1,6 +1,6 @@
-import { useState } from "react";
-import Board from "./Board/Board";
-import History from "./History/History";
+import { useState } from 'react';
+import Board from './Board/Board';
+import History from './History/History';
 import './Game.css';
 
 export type squareType = 'O' | 'X' | null;
@@ -16,12 +16,12 @@ export default function Game() {
   const handlePlay = (nextSqures: squaresType) => {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSqures];
     setHistory(nextHistory);
-    setCurrentMove(currentMove + 1)
-  }
+    setCurrentMove(currentMove + 1);
+  };
 
   const jumpTo = (nextMove: number) => {
     setCurrentMove(nextMove);
-  }
+  };
 
   return (
     <div className="game">
@@ -32,5 +32,5 @@ export default function Game() {
         <History history={history} jumpTo={jumpTo} />
       </div>
     </div>
-  )
+  );
 }
