@@ -1,13 +1,7 @@
-import { historyType } from "../Game";
+import { historyType } from '../Game';
 import './History.css';
 
-export default function History({
-  history,
-  jumpTo,
-}: {
-  history: historyType;
-  jumpTo: (nextMove: number) => void;
-}) {
+export default function History({ history, jumpTo }: { history: historyType; jumpTo: (nextMove: number) => void }) {
   const Moves = history.map((_, index) => {
     let buttonTxt = '';
     if (index > 0) {
@@ -15,15 +9,19 @@ export default function History({
     } else {
       buttonTxt = 'Go to game start';
     }
-    console.log('history, index', index)
+    console.log('history, index', index);
 
-    return <li key={index}><button onClick={() => jumpTo(index)}>{buttonTxt}</button></li>
-  })
+    return (
+      <li key={index}>
+        <button onClick={() => jumpTo(index)}>{buttonTxt}</button>
+      </li>
+    );
+  });
 
   return (
     <section className="history">
       <div>Game History</div>
       <ol className="history-list">{Moves}</ol>
     </section>
-  )
+  );
 }

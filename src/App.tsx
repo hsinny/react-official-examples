@@ -1,14 +1,14 @@
-import './App.css'
+import './App.css';
 // import Game from './components/Game/Game';
-import FilterableProductTable from './components/FilterableProductTable/FilterableProductTable'
+import FilterableProductTable from './components/FilterableProductTable/FilterableProductTable';
 
 function App() {
   return (
     <>
       {/* <Game /> */}
-      <FilterableProductTable/>
+      <FilterableProductTable />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
