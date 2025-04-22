@@ -1,5 +1,5 @@
-import Square from "../Square/Square";
-import { squaresType, squareType } from "../Game";
+import Square from '../Square/Square';
+import { squaresType, squareType } from '../Game';
 import './Board.css';
 
 export default function Board({
@@ -17,7 +17,7 @@ export default function Board({
     const nextSqures = [...squares];
     nextSqures[index] = xIsNext ? 'O' : 'X';
     onPlay(nextSqures);
-  }
+  };
 
   const calculateWinner = (boardSquares: squaresType): squareType => {
     const winLines = [
@@ -34,12 +34,17 @@ export default function Board({
     for (let i = 0; i < winLines.length; i++) {
       const [a, b, c] = winLines[i];
 
-      if (boardSquares[a] && boardSquares[a] === boardSquares[b] && boardSquares[b] === boardSquares[c] && boardSquares[c] === boardSquares[a]) {
+      if (
+        boardSquares[a] &&
+        boardSquares[a] === boardSquares[b] &&
+        boardSquares[b] === boardSquares[c] &&
+        boardSquares[c] === boardSquares[a]
+      ) {
         return boardSquares[a];
       }
     }
     return null;
-  }
+  };
 
   const winner = calculateWinner(squares);
   let gameStatus = winner ? `Winner: ${winner}` : `Now player: ${xIsNext ? 'O' : 'X'}`;
@@ -65,5 +70,5 @@ export default function Board({
         </div>
       </div>
     </section>
-  )
+  );
 }

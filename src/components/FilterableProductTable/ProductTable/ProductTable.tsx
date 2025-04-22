@@ -11,28 +11,29 @@ const ProductsByCategory = ({ productsByCategory }: { productsByCategory: Produc
 
   for (const category in productsByCategory) {
     const CategoryTitle = () => (
-      <tr className='product-category-row'>
+      <tr className="product-category-row">
         <th colSpan={2}>{category}</th>
       </tr>
-    )
+    );
 
-    const CategoryProducts = () => productsByCategory[category].map((product, index) => (
-      <tr key={index} className={`product-row ${product.stocked ? '' : 'product-row--soldout'}`}>
-        <td>{product.name}</td>
-        <td className='product-col-price'>${product.price}</td>
-      </tr>
-    ));
+    const CategoryProducts = () =>
+      productsByCategory[category].map((product, index) => (
+        <tr key={index} className={`product-row ${product.stocked ? '' : 'product-row--soldout'}`}>
+          <td>{product.name}</td>
+          <td className="product-col-price">${product.price}</td>
+        </tr>
+      ));
 
-    categoryRows.push((
+    categoryRows.push(
       <React.Fragment key={category}>
         <CategoryTitle />
         <CategoryProducts />
-      </React.Fragment>
-    ));
+      </React.Fragment>,
+    );
   }
 
   return <>{categoryRows}</>;
-}
+};
 
 export default function ProductTable({
   products,
@@ -43,15 +44,16 @@ export default function ProductTable({
   filterTxt: string;
   isStockOnly: boolean;
 }) {
-
   const visibleProducts = (() => {
     let filteredProducts: Products = [...products];
     if (filterTxt.trim() !== '') {
-      filteredProducts = filteredProducts.filter(product => product.name.toLowerCase().indexOf(filterTxt.toLowerCase().trim()) !== -1)
+      filteredProducts = filteredProducts.filter(
+        (product) => product.name.toLowerCase().indexOf(filterTxt.toLowerCase().trim()) !== -1,
+      );
     }
 
     if (isStockOnly) {
-      filteredProducts = filteredProducts.filter(product => product.stocked)
+      filteredProducts = filteredProducts.filter((product) => product.stocked);
     }
 
     return filteredProducts;
@@ -77,5 +79,5 @@ export default function ProductTable({
         <ProductsByCategory productsByCategory={productsByCategory} />
       </tbody>
     </table>
-  )
+  );
 }
