@@ -12,15 +12,17 @@ interface Place {
   childPlaces: Place[];
 }
 
-const PlaceTree = ({ place }: { place: Place }) => {
+const PlaceTree = ({ place, onDelete }: { place: Place; onDelete: (placeId: number) => void }) => {
   const childPlaces = place.childPlaces;
+
   return (
     <li>
       {place.title}
+      <button onClick={() => onDelete(place.id)}>Delete</button>
       {childPlaces.length > 0 && (
         <ol>
           {childPlaces.map((place) => (
-            <PlaceTree key={place.id} place={place} />
+            <PlaceTree key={place.id} place={place} onDelete={onDelete} />
           ))}
         </ol>
       )}
@@ -29,16 +31,30 @@ const PlaceTree = ({ place }: { place: Place }) => {
 };
 
 const TravelPlan = () => {
-  const [plan] = useState(initialTravelPlan);
+  const [plan, setPlan] = useState<Place>(initialTravelPlan);
   const places = plan.childPlaces;
+
+  const handleDelete = (idToRemove: number) => {
+    setPlan((prevPlan) => removePlaceById(prevPlan, idToRemove));
+  };
 
   return (
     <ol style={{ textAlign: 'left' }}>
       {places.map((place) => (
-        <PlaceTree key={place.id} place={place} />
+        <PlaceTree key={place.id} place={place} onDelete={handleDelete} />
       ))}
     </ol>
   );
 };
+
+// 遞迴移除指定 id 的節點
+function removePlaceById(place: Place, idToRemove: number): Place {
+  return {
+    ...place,
+    childPlaces: place.childPlaces
+      .filter((child) => child.id !== idToRemove)
+      .map((child) => removePlaceById(child, idToRemove)),
+  };
+}
 
 export default TravelPlan;
