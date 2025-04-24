@@ -7,12 +7,10 @@ interface Task {
   checked: boolean;
 }
 
-interface Action {
-  type: string;
-  id?: number;
-  title?: string;
-  checked?: boolean;
-}
+type Action =
+  | { type: 'ADD'; id: number; title: string }
+  | { type: 'CHANGE'; id: number; title: string; checked: boolean }
+  | { type: 'DELETE'; id: number };
 
 let nextId = 0;
 const AddItem = ({ onAddItem }: { onAddItem: (title: string) => void }) => {
@@ -136,21 +134,13 @@ function taskReducer(tasks: Task[], action: Action) {
         ...tasks,
         {
           id: nextId++,
-          title: action.title || '',
+          title: action.title,
           checked: false,
         },
       ];
     }
     case 'CHANGE': {
-      return tasks.map((task) =>
-        task.id === action.id
-          ? {
-              id: action.id,
-              title: action.title,
-              checked: action.checked,
-            }
-          : task,
-      );
+      return tasks.map((task) => (task.id === action.id ? action : task));
     }
     case 'DELETE': {
       return tasks.filter((task) => task.id !== action.id);
