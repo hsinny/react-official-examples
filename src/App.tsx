@@ -4,7 +4,8 @@ import './App.css';
 // import TravelPlanWithNestedState from './components/TravelPlan/TravelPlanWithNestedState';
 // import TravelPlanWithFlattenState from './components/TravelPlan/TravelPlanWithFlattenState';
 // import TravelPlanWithFlattenStateAndImmer from './components/TravelPlan/TravelPlanWithFlattenStateAndImmer';
-import Todolist from './components/Todolist/Todolist';
+// import Todolist from './components/Todolist/Todolist';
+import TodolistWithReducer from './components/Todolist/TodolistWithReducer';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       {/* <TravelPlanWithNestedState /> */}
       {/* <TravelPlanWithFlattenState /> */}
       {/* <TravelPlanWithFlattenStateAndImmer /> */}
-      <Todolist />
+      {/* <Todolist /> */}
+      <TodolistWithReducer />
     </>
   );
 }
