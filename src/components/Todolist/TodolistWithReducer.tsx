@@ -7,24 +7,24 @@ interface Task {
   checked: boolean;
 }
 
-type Action =
-  | { type: 'ADD'; id: number; title: string }
-  | { type: 'CHANGE'; id: number; title: string; checked: boolean }
-  | { type: 'DELETE'; id: number };
+type Action = { type: 'ADD'; title: string } | { type: 'CHANGE'; task: Task } | { type: 'DELETE'; id: number };
 
 let nextId = 0;
-const AddItem = ({ onAddItem }: { onAddItem: (title: string) => void }) => {
-  const [title, setTitle] = useState<string>('');
 
-  const handleAddItem = (titleTxt: string) => {
-    onAddItem(titleTxt);
-    setTitle('');
+const AddItem = ({ onAddItem }: { onAddItem: (title: string) => void }) => {
+  const [title, setTitle] = useState('');
+
+  const handleAddItem = () => {
+    if (title.trim()) {
+      onAddItem(title.trim());
+      setTitle('');
+    }
   };
 
   return (
     <div className="addItem">
       <input type="text" placeholder="Add Item" value={title} onChange={(e) => setTitle(e.target.value)} />
-      <button onClick={() => handleAddItem(title)}>Add</button>
+      <button onClick={handleAddItem}>Add</button>
     </div>
   );
 };
@@ -38,23 +38,24 @@ const Task = ({
   onChangeTask: (task: Task) => void;
   onDeleteTask: (id: number) => void;
 }) => {
-  const [isEdit, setIsEdit] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
-    <li className="task" key={task.id}>
+    <li className="task">
       <input
         type="checkbox"
         checked={task.checked}
         onChange={() => onChangeTask({ ...task, checked: !task.checked })}
       />
-      {!isEdit ? (
+      {!isEditing ? (
         <>
           <p>{task.title}</p>
-          <button onClick={() => setIsEdit(true)}>Edit</button>
+          <button onClick={() => setIsEditing(true)}>Edit</button>
         </>
       ) : (
         <>
           <input type="text" value={task.title} onChange={(e) => onChangeTask({ ...task, title: e.target.value })} />
-          <button onClick={() => setIsEdit(false)}>Save</button>
+          <button onClick={() => setIsEditing(false)}>Save</button>
         </>
       )}
       <button onClick={() => onDeleteTask(task.id)}>Delete</button>
@@ -63,61 +64,43 @@ const Task = ({
 };
 
 const TaskList = ({
-  list,
-  onChangeTask: onChangeTask,
-  onDeleteTask: onDeleteTask,
+  tasks,
+  onChangeTask,
+  onDeleteTask,
 }: {
-  list: Array<Task>;
+  tasks: Task[];
   onChangeTask: (task: Task) => void;
-  onDeleteTask: (taskId: number) => void;
-}) => {
-  return (
-    <ol className="taskList">
-      {list.map((item) => (
-        <Task key={item.id} task={item} onChangeTask={onChangeTask} onDeleteTask={onDeleteTask} />
-      ))}
-    </ol>
-  );
-};
+  onDeleteTask: (id: number) => void;
+}) => (
+  <ol className="taskList">
+    {tasks.map((task) => (
+      <Task key={task.id} task={task} onChangeTask={onChangeTask} onDeleteTask={onDeleteTask} />
+    ))}
+  </ol>
+);
 
 const Todolist = () => {
-  const [todolist, dispatch] = useReducer(taskReducer, []);
-  const total = todolist.length;
-  const completed = todolist.filter((item) => item.checked).length;
+  const [tasks, dispatch] = useReducer(taskReducer, []);
 
   const handleAddItem = (title: string) => {
-    dispatch({
-      // action object
-      type: 'ADD',
-      id: nextId++,
-      title: title,
-    });
+    dispatch({ type: 'ADD', title });
   };
 
   const handleChangeTask = (task: Task) => {
-    dispatch(
-      // action object
-      {
-        type: 'CHANGE',
-        id: task.id,
-        title: task.title,
-        checked: task.checked,
-      },
-    );
+    dispatch({ type: 'CHANGE', task });
   };
 
-  const handleDeleteTask = (taskId: number) => {
-    dispatch({
-      // action object
-      type: 'DELETE',
-      id: taskId,
-    });
+  const handleDeleteTask = (id: number) => {
+    dispatch({ type: 'DELETE', id });
   };
+
+  const total = tasks.length;
+  const completed = tasks.filter((task) => task.checked).length;
 
   return (
     <section className="section">
       <AddItem onAddItem={handleAddItem} />
-      <TaskList list={todolist} onChangeTask={handleChangeTask} onDeleteTask={handleDeleteTask} />
+      <TaskList tasks={tasks} onChangeTask={handleChangeTask} onDeleteTask={handleDeleteTask} />
       <div>
         {completed} out of {total} packed!
       </div>
@@ -125,29 +108,16 @@ const Todolist = () => {
   );
 };
 
-// 狀態邏輯函式參數：目前的狀態, action 物件
-function taskReducer(tasks: Task[], action: Action) {
-  // return next state for React to set
+function taskReducer(tasks: Task[], action: Action): Task[] {
   switch (action.type) {
-    case 'ADD': {
-      return [
-        ...tasks,
-        {
-          id: nextId++,
-          title: action.title,
-          checked: false,
-        },
-      ];
-    }
-    case 'CHANGE': {
-      return tasks.map((task) => (task.id === action.id ? action : task));
-    }
-    case 'DELETE': {
+    case 'ADD':
+      return [...tasks, { id: nextId++, title: action.title, checked: false }];
+    case 'CHANGE':
+      return tasks.map((task) => (task.id === action.task.id ? action.task : task));
+    case 'DELETE':
       return tasks.filter((task) => task.id !== action.id);
-    }
-    default: {
+    default:
       return tasks;
-    }
   }
 }
 
