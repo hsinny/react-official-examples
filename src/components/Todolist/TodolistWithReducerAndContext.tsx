@@ -1,22 +1,16 @@
-import { useReducer, useState } from 'react';
+import { useContext, useReducer, useState } from 'react';
+import { TasksContext, TasksDispatchContext, TaskItem, Action } from './TaskContext';
 import './Todolist.css';
-
-interface Task {
-  title: string;
-  id: number;
-  checked: boolean;
-}
-
-type Action = { type: 'ADD'; title: string } | { type: 'CHANGE'; task: Task } | { type: 'DELETE'; id: number };
 
 let nextId = 0;
 
-const AddTask = ({ onAddTask }: { onAddTask: (title: string) => void }) => {
+const AddTask = () => {
+  const dispatch = useContext(TasksDispatchContext);
   const [title, setTitle] = useState('');
 
   const handleAddTask = () => {
     if (title.trim()) {
-      onAddTask(title.trim());
+      dispatch({ type: 'ADD', title: title.trim() });
       setTitle('');
     }
   };
@@ -29,23 +23,24 @@ const AddTask = ({ onAddTask }: { onAddTask: (title: string) => void }) => {
   );
 };
 
-const Task = ({
-  task,
-  onChangeTask,
-  onDeleteTask,
-}: {
-  task: Task;
-  onChangeTask: (task: Task) => void;
-  onDeleteTask: (id: number) => void;
-}) => {
+const Task = ({ task }: { task: TaskItem }) => {
+  const dispatch = useContext(TasksDispatchContext);
   const [isEditing, setIsEditing] = useState(false);
+
+  const handleChangeTask = (task: TaskItem) => {
+    dispatch({ type: 'CHANGE', task });
+  };
+
+  const handleDeleteTask = (id: number) => {
+    dispatch({ type: 'DELETE', id });
+  };
 
   return (
     <li className="task">
       <input
         type="checkbox"
         checked={task.checked}
-        onChange={() => onChangeTask({ ...task, checked: !task.checked })}
+        onChange={() => handleChangeTask({ ...task, checked: !task.checked })}
       />
       {!isEditing ? (
         <>
@@ -54,53 +49,45 @@ const Task = ({
         </>
       ) : (
         <>
-          <input type="text" value={task.title} onChange={(e) => onChangeTask({ ...task, title: e.target.value })} />
+          <input
+            type="text"
+            value={task.title}
+            onChange={(e) => handleChangeTask({ ...task, title: e.target.value })}
+          />
           <button onClick={() => setIsEditing(false)}>Save</button>
         </>
       )}
-      <button onClick={() => onDeleteTask(task.id)}>Delete</button>
+      <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
     </li>
   );
 };
 
-const TaskList = ({
-  tasks,
-  onChangeTask,
-  onDeleteTask,
-}: {
-  tasks: Task[];
-  onChangeTask: (task: Task) => void;
-  onDeleteTask: (id: number) => void;
-}) => (
-  <ol className="taskList">
-    {tasks.map((task) => (
-      <Task key={task.id} task={task} onChangeTask={onChangeTask} onDeleteTask={onDeleteTask} />
-    ))}
-  </ol>
-);
+const TaskList = () => {
+  const tasks = useContext(TasksContext);
+
+  return (
+    <ol className="taskList">
+      {tasks.map((task) => (
+        <Task key={task.id} task={task} />
+      ))}
+    </ol>
+  );
+};
 
 const Todolist = () => {
   const [tasks, dispatch] = useReducer(taskReducer, []);
-
-  const handleAddTask = (title: string) => {
-    dispatch({ type: 'ADD', title });
-  };
-
-  const handleChangeTask = (task: Task) => {
-    dispatch({ type: 'CHANGE', task });
-  };
-
-  const handleDeleteTask = (id: number) => {
-    dispatch({ type: 'DELETE', id });
-  };
 
   const total = tasks.length;
   const completed = tasks.filter((task) => task.checked).length;
 
   return (
     <section className="section">
-      <AddTask onAddTask={handleAddTask} />
-      <TaskList tasks={tasks} onChangeTask={handleChangeTask} onDeleteTask={handleDeleteTask} />
+      <TasksContext.Provider value={tasks}>
+        <TasksDispatchContext.Provider value={dispatch}>
+          <AddTask />
+          <TaskList />
+        </TasksDispatchContext.Provider>
+      </TasksContext.Provider>
       <div>
         {completed} out of {total} packed!
       </div>
@@ -108,7 +95,7 @@ const Todolist = () => {
   );
 };
 
-function taskReducer(tasks: Task[], action: Action): Task[] {
+function taskReducer(tasks: TaskItem[], action: Action): TaskItem[] {
   switch (action.type) {
     case 'ADD':
       return [...tasks, { id: nextId++, title: action.title, checked: false }];
