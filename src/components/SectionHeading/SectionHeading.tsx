@@ -3,12 +3,12 @@ import Heading from './Heading';
 
 const SectionHeading = () => {
   return (
-    <Section level={1}>
+    <Section>
       <Heading>Heading 1</Heading>
-      <Section level={2}>
+      <Section>
         <Heading>Heading 2</Heading>
         <Heading>Heading 2</Heading>
-        <Section level={3}>
+        <Section>
           <Heading>Heading 3</Heading>
           <Heading>Heading 3</Heading>
           <Heading>Heading 3</Heading>
