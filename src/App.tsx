@@ -6,7 +6,8 @@ import './App.css';
 // import TravelPlanWithFlattenStateAndImmer from './components/TravelPlan/TravelPlanWithFlattenStateAndImmer';
 // import Todolist from './components/Todolist/Todolist';
 // import TodolistWithReducer from './components/Todolist/TodolistWithReducer';
-import SectionHeading from './components/SectionHeading/SectionHeading';
+// import SectionHeading from './components/SectionHeading/SectionHeading';
+import TasksWithReducerAndContext from './components/Tasks/TasksWithReducerAndContext';
 
 function App() {
   return (
@@ -18,7 +19,8 @@ function App() {
       {/* <TravelPlanWithFlattenStateAndImmer /> */}
       {/* <Todolist /> */}
       {/* <TodolistWithReducer /> */}
-      <SectionHeading />
+      {/* <SectionHeading /> */}
+      <TasksWithReducerAndContext />
     </>
   );
 }
