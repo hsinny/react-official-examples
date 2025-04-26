@@ -7,7 +7,7 @@ import './App.css';
 // import Todolist from './components/Todolist/Todolist';
 // import TodolistWithReducer from './components/Todolist/TodolistWithReducer';
 // import SectionHeading from './components/SectionHeading/SectionHeading';
-import TodolistWithReducerAndContext from './components/Todolist/TodolistWithReducerAndContext';
+import TasksWithReducerAndContext from './components/Tasks/TasksWithReducerAndContext';
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
       {/* <Todolist /> */}
       {/* <TodolistWithReducer /> */}
       {/* <SectionHeading /> */}
-      <TodolistWithReducerAndContext />
+      <TasksWithReducerAndContext />
     </>
   );
 }

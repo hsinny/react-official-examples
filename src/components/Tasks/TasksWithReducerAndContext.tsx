@@ -1,6 +1,6 @@
 import { useContext, useReducer, useState } from 'react';
-import { TasksContext, TasksDispatchContext, TaskItem, Action } from './TaskContext';
-import './Todolist.css';
+import { TasksContext, TasksDispatchContext, TaskItem, Action } from './TasksContext';
+import './Tasks.css';
 
 let nextId = 0;
 
@@ -16,7 +16,7 @@ const AddTask = () => {
   };
 
   return (
-    <div className="addItem">
+    <div className="addTask">
       <input type="text" placeholder="Add Task" value={title} onChange={(e) => setTitle(e.target.value)} />
       <button onClick={handleAddTask}>Add</button>
     </div>
