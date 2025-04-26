@@ -1,11 +1,9 @@
-import { useContext, useReducer, useState } from 'react';
-import { TasksContext, TasksDispatchContext, TaskItem, Action } from './TasksContext';
+import { useState } from 'react';
+import { TaskItem, TasksProvider, useTasks, useTasksDispatchContext } from './TasksContext';
 import './Tasks.css';
 
-let nextId = 0;
-
 const AddTask = () => {
-  const dispatch = useContext(TasksDispatchContext);
+  const dispatch = useTasksDispatchContext();
   const [title, setTitle] = useState('');
 
   const handleAddTask = () => {
@@ -24,7 +22,7 @@ const AddTask = () => {
 };
 
 const Task = ({ task }: { task: TaskItem }) => {
-  const dispatch = useContext(TasksDispatchContext);
+  const dispatch = useTasksDispatchContext();
   const [isEditing, setIsEditing] = useState(false);
 
   const handleChangeTask = (task: TaskItem) => {
@@ -63,49 +61,33 @@ const Task = ({ task }: { task: TaskItem }) => {
 };
 
 const TaskList = () => {
-  const tasks = useContext(TasksContext);
-
-  return (
-    <ol className="taskList">
-      {tasks.map((task) => (
-        <Task key={task.id} task={task} />
-      ))}
-    </ol>
-  );
-};
-
-const Todolist = () => {
-  const [tasks, dispatch] = useReducer(taskReducer, []);
-
+  const tasks = useTasks();
   const total = tasks.length;
   const completed = tasks.filter((task) => task.checked).length;
 
   return (
-    <section className="section">
-      <TasksContext.Provider value={tasks}>
-        <TasksDispatchContext.Provider value={dispatch}>
-          <AddTask />
-          <TaskList />
-        </TasksDispatchContext.Provider>
-      </TasksContext.Provider>
+    <>
+      <ol className="taskList">
+        {tasks.map((task) => (
+          <Task key={task.id} task={task} />
+        ))}
+      </ol>
       <div>
         {completed} out of {total} packed!
       </div>
-    </section>
+    </>
   );
 };
 
-function taskReducer(tasks: TaskItem[], action: Action): TaskItem[] {
-  switch (action.type) {
-    case 'ADD':
-      return [...tasks, { id: nextId++, title: action.title, checked: false }];
-    case 'CHANGE':
-      return tasks.map((task) => (task.id === action.task.id ? action.task : task));
-    case 'DELETE':
-      return tasks.filter((task) => task.id !== action.id);
-    default:
-      return tasks;
-  }
-}
+const Todolist = () => {
+  return (
+    <section className="section">
+      <TasksProvider>
+        <AddTask />
+        <TaskList />
+      </TasksProvider>
+    </section>
+  );
+};
 
 export default Todolist;
