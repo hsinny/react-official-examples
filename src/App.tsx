@@ -3,7 +3,11 @@ import './App.css';
 // import FilterableProductTable from './components/FilterableProductTable/FilterableProductTable';
 // import TravelPlanWithNestedState from './components/TravelPlan/TravelPlanWithNestedState';
 // import TravelPlanWithFlattenState from './components/TravelPlan/TravelPlanWithFlattenState';
-import TravelPlanWithFlattenStateAndImmer from './components/TravelPlan/TravelPlanWithFlattenStateAndImmer';
+// import TravelPlanWithFlattenStateAndImmer from './components/TravelPlan/TravelPlanWithFlattenStateAndImmer';
+// import Todolist from './components/Todolist/Todolist';
+// import TodolistWithReducer from './components/Todolist/TodolistWithReducer';
+// import SectionHeading from './components/SectionHeading/SectionHeading';
+import TasksWithReducerAndContext from './components/Tasks/TasksWithReducerAndContext';
 
 function App() {
   return (
@@ -12,7 +16,11 @@ function App() {
       {/* <FilterableProductTable /> */}
       {/* <TravelPlanWithNestedState /> */}
       {/* <TravelPlanWithFlattenState /> */}
-      <TravelPlanWithFlattenStateAndImmer />
+      {/* <TravelPlanWithFlattenStateAndImmer /> */}
+      {/* <Todolist /> */}
+      {/* <TodolistWithReducer /> */}
+      {/* <SectionHeading /> */}
+      <TasksWithReducerAndContext />
     </>
   );
 }
